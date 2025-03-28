@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Temas y Practicas</title>
+</head>
+<body>
+    <h1>Temas y Practicas</h1>
+    <form id = "Form" class="buttons">
+        <button type="button" data-type="Programacion en JavaScript">🖥️</button>
+        <button type="button" data-type="Estructuras de Datos y Algoritmos">⛓️‍💥</button>
+        <button type="button" data-type="Redes de Computadoras">🪐</button>
+    </form>
+    <form id = "Form" class="buttons">
+        <button type="button" data-type="Ciberseguridad y Protección de Datos">🔒</button>
+        <button type="button" data-type="Bases de Datos y SQL">🗄️</button>
+        <button type="button" data-type="Sistemas Operativos">💻</button>
+    </form>
+    <div id="Container"></div>
+
+    <script>
+        document.querySelectorAll("#Form button").forEach(button => {
+          button.addEventListener("click", async (event) => {
+            const type = event.target.getAttribute("data-type").toLowerCase();
+            
+          
+            const response = await fetch(`/tema/${type}`);
+            const tema = await response.json();
+
+            const contenedor = document.getElementById("Container"); 
+            if (tema.error) {
+              contenedor.innerHTML = "<h2>Tema no encontrado</h2>";
+            } else {
+                contenedor.innerHTML = `
+                <h2>Modulo: ${tema.nombre}</h2> 
+                <h3>Descripcion: ${tema.descripcion}</h3>
+                <h3>Palabras Claves: ${tema.palabrasClaves}</h3>
+                <h2>Practicas Recomendadas</h2> 
+                <ul id="listaModulos">
+                  ${tema.practicas.map(practica => `
+                    <li>${practica.nombre}\n, Descripción: ${practica.descripcion}</li>
+                    <li>Objetivo: ${practica.objetivo}</li> `).join("")}</ul>`;
+            }
+          });
+        });
+            
+    </script>
+    
+</body>
+</html>
